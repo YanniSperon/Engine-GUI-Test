@@ -3,28 +3,25 @@
 #include "Node.h"
 
 #include <string>
+#include <memory>
 
 namespace AD {
 	class Scene {
 	private:
-		Node* rootNode;
-		Node* activeCameraNode;
+		Node* m_RootNode;
+		Node* m_ActiveCameraNode;
 
 	public:
 		Scene();
 		~Scene();
 
 		void Update(float deltaTime);
-		void Begin();
 		void Draw();
-		void End();
 
 		Node* GetRootNode();
-		Node* CreateChildNode();
 		void AddNode(Node* object);
-		Node* GetNodeByName(const std::string& nodeName);
+		Node* GetNodeByID(int id);
 
-		void SetRootNode(Node* newNode);
-		void SetActiveCamera(Node* newCamera);
+		void SetActiveCamera(Node* newCameraNode);
 	};
 }

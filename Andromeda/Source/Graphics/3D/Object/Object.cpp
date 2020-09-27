@@ -2,12 +2,13 @@
 #include "Mesh3DManager.h"
 #include "TextureManager.h"
 #include "ShaderManager.h"
+#include "Console.h"
 
 #include <glm/gtx/euler_angles.hpp>
 
 namespace AD {
 	Object::Object(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, bool isDynamic)
-		: m_Mesh(Mesh3DManager::GetInstance()->GetMesh(meshPath, isDynamic)), m_Shader(ShaderManager::GetInstance()->GetShader(shaderPath)), m_Texture(TextureManager::GetInstance()->GetTexture(texturePath)), m_Translation(0.0f), m_Rotation(0.0f), m_Scale(1.0f), m_IsDynamic(isDynamic)
+		: m_Mesh(Mesh3DManager::GetInstance()->GetMesh(meshPath, isDynamic)), m_Shader(ShaderManager::GetInstance()->GetShader(shaderPath)), m_Texture(TextureManager::GetInstance()->GetTexture(texturePath)), m_Translation(0.0f), m_Rotation(0.0f), m_Scale(1.0f), m_IsDynamic(isDynamic), m_FinalTransformation(1.0f)
 	{
 
 	}
@@ -104,6 +105,31 @@ namespace AD {
 		//m_Rotation.y = glm::degrees(-glm::asin(forwardDirection.y));
 	}
 
+	void Object::GenerateFinalTransformation(const glm::mat4& offset)
+	{
+		m_FinalTransformation = offset * GetTransformationMatrix();
+	}
+
+	void Object::SetFinalTransformation(const glm::mat4& transformation)
+	{
+		m_FinalTransformation = transformation;
+	}
+
+	void Object::Draw(const glm::mat4& projection, const glm::mat4& view)
+	{
+		if (m_Mesh && m_Texture && m_Shader) {
+			m_Shader->Bind();
+			m_Texture->Bind();
+			m_Mesh->Bind();
+
+			m_Shader->SetMat4("M", m_FinalTransformation);
+			m_Shader->SetMat4("V", view);
+			m_Shader->SetMat4("P", projection);
+
+			m_Mesh->Draw();
+		}
+	}
+
 	void Object::Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& modelOffset)
 	{
 		if (m_Mesh && m_Texture && m_Shader) {
@@ -111,7 +137,9 @@ namespace AD {
 			m_Texture->Bind();
 			m_Mesh->Bind();
 
-			m_Shader->SetMat4("M", modelOffset * GetTransformationMatrix());
+			m_FinalTransformation = modelOffset * GetTransformationMatrix();
+
+			m_Shader->SetMat4("M", m_FinalTransformation);
 			m_Shader->SetMat4("V", view);
 			m_Shader->SetMat4("P", projection);
 

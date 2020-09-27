@@ -23,6 +23,8 @@ namespace AD {
 
 		bool m_IsDynamic;
 
+		glm::mat4 m_FinalTransformation;
+
 	public:
 		Object(const std::string& meshPath, const std::string& shaderPath, const std::string& texturePath, bool isDynamic);
 		~Object();
@@ -48,6 +50,9 @@ namespace AD {
 		void LookInDirection(const glm::vec3& forwardDirection);
 		void LookInDirectionX(const glm::vec3& forwardDirection);
 
+		void GenerateFinalTransformation(const glm::mat4& offset);
+		void SetFinalTransformation(const glm::mat4& transformation);
+		void Draw(const glm::mat4& projection, const glm::mat4& view);
 		void Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& modelOffset);
 
 		static Object* DeepCopy(Object* object);

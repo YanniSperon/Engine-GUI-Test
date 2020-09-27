@@ -6,6 +6,8 @@
 #include "TextureManager.h"
 #include "ShaderManager.h"
 #include "Window.h"
+#include "Renderer.h"
+#include "LinearRenderer.h"
 
 #include <memory>
 
@@ -24,6 +26,7 @@ namespace AD
 		TextureManager::InitializeSingleton();
 		ShaderManager::InitializeSingleton();
 		Window::InitializeSingleton();
+		Renderer::InitializeSingleton(new LinearRenderer());
 	}
 
 	std::chrono::steady_clock::time_point& AD::Global::GetStartTime()
@@ -50,5 +53,6 @@ namespace AD
 		TextureManager::CleanupSingleton();
 		ShaderManager::CleanupSingleton();
 		Window::CleanupSingleton();
+		Renderer::CleanupSingleton();
 	}
 }

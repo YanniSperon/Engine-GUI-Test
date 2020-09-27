@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "Console.h"
 #include "Config.h"
+#include "Renderer.h"
 
 #include <glew.h>
 #include <glfw3.h>

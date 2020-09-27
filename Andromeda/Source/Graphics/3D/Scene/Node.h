@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Renderer.h"
 
 #include <glm/glm.hpp>
 
@@ -33,7 +34,12 @@ namespace AD {
 		~Node();
 
 		void Update(float deltaTime);
-		void Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& currentTransformationMatrix);
+		void Draw(Renderer* renderer);
+
+		void SetObjectComponent(Object* object);
+		void SetCameraComponent(Camera* camera);
+		void SetLightComponent(Light* light);
+		void SetName(const std::string& name);
 
 		void AddChild(Node* child);
 
@@ -42,6 +48,22 @@ namespace AD {
 
 		glm::mat4 GetTransformationMatrix();
 		Node* GetParent();
+		std::string GetName();
+		Object* GetObjectComponent();
+		Camera* GetCameraComponent();
+		Light* GetLightComponent();
+
+		bool GetHasObjectComponent();
+		bool GetHasCameraComponent();
+		bool GetHasLightComponent();
+
+		void AddObjectComponent(Object* object);
+		void AddCameraComponent(Camera* camera);
+		void AddLightComponent(Light* light);
+
+		void RemoveObjectComponent();
+		void RemoveCameraComponent();
+		void RemoveLightComponent();
 
 		// Copies children nodes
 		static Node* DeepCopy(Node* node);
@@ -49,5 +71,6 @@ namespace AD {
 		static Node* ShallowCopy(Node* node);
 	private:
 		static Node* DeepCopyRecursive(Node* node, bool isFirst);
+		void UpdatePositioningOfChildrenRecursive(float deltaTime, const glm::mat4& currentTransformationMatrix);
 	};
 }

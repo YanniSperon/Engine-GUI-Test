@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Console.h"
 
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -29,18 +30,72 @@ namespace AD {
 
 	void Node::Update(float deltaTime)
 	{
-		
+		UpdatePositioningOfChildrenRecursive(deltaTime, glm::mat4(1.0f));
 	}
 
-	void Node::Draw(const glm::mat4& projection, const glm::mat4& view, const glm::mat4& currentTransformationMatrix)
+	void Node::UpdatePositioningOfChildrenRecursive(float deltaTime, const glm::mat4& currentTransformationMatrix)
 	{
 		glm::mat4 newTransformationMatrix = currentTransformationMatrix * GetTransformationMatrix();
-		for (int i = 0; i < m_Children.size(); i++) {
-			m_Children[i]->Draw(projection, view, newTransformationMatrix);
-		}
 		if (m_Object) {
-			m_Object->Draw(projection, view, newTransformationMatrix * m_Object->GetTransformationMatrix());
+			m_Object->GenerateFinalTransformation(newTransformationMatrix);
 		}
+		if (m_Camera) {
+			m_Camera->Update(deltaTime);
+		}
+		for (int i = 0; i < m_Children.size(); i++) {
+			m_Children[i]->UpdatePositioningOfChildrenRecursive(deltaTime, newTransformationMatrix);
+		}
+	}
+
+	void Node::Draw(Renderer* renderer)
+	{
+		if (m_Object) {
+			renderer->AddObject(m_Object);
+		}
+		for (int i = 0; i < m_Children.size(); i++) {
+			m_Children[i]->Draw(renderer);
+		}
+	}
+
+	void Node::SetObjectComponent(Object* object)
+	{
+		if (m_Object) {
+			Object* temp = m_Object;
+			m_Object = object;
+			delete temp;
+		}
+		else {
+			m_Object = object;
+		}
+	}
+
+	void Node::SetCameraComponent(Camera* camera)
+	{
+		if (m_Camera) {
+			Camera* temp = m_Camera;
+			m_Camera = camera;
+			delete temp;
+		}
+		else {
+			m_Camera = camera;
+		}
+	}
+
+	void Node::SetLightComponent(Light* light)
+	{
+		if (m_Light) {
+			Light* temp = m_Light;
+			m_Light = light;
+			delete temp;
+		}
+		else {
+			m_Light = light;
+		}
+	}
+
+	void Node::SetName(const std::string& name)
+	{
+		m_Name = name;
 	}
 
 	void Node::AddChild(Node* child)
@@ -78,12 +133,80 @@ namespace AD {
 
 	glm::mat4 Node::GetTransformationMatrix()
 	{
-		return glm::translate(glm::mat4(), m_Translation) * glm::yawPitchRoll(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z));
+		return glm::translate(glm::mat4(1.0f), m_Translation) * glm::yawPitchRoll(glm::radians(m_Rotation.x), glm::radians(m_Rotation.y), glm::radians(m_Rotation.z));
 	}
 
 	Node* Node::GetParent()
 	{
 		return m_Parent;
+	}
+
+	std::string Node::GetName()
+	{
+		return m_Name;
+	}
+
+	Object* Node::GetObjectComponent()
+	{
+		return m_Object;
+	}
+
+	Camera* Node::GetCameraComponent()
+	{
+		return m_Camera;
+	}
+
+	Light* Node::GetLightComponent()
+	{
+		return m_Light;
+	}
+
+	bool Node::GetHasObjectComponent()
+	{
+		return m_Object;
+	}
+
+	bool Node::GetHasCameraComponent()
+	{
+		return m_Camera;
+	}
+
+	bool Node::GetHasLightComponent()
+	{
+		return m_Light;
+	}
+
+	void Node::AddObjectComponent(Object* object)
+	{
+		m_Object = object;
+	}
+
+	void Node::AddCameraComponent(Camera* camera)
+	{
+		m_Camera = camera;
+	}
+
+	void Node::AddLightComponent(Light* light)
+	{
+		m_Light = light;
+	}
+
+	void Node::RemoveObjectComponent()
+	{
+		delete m_Object;
+		m_Object = nullptr;
+	}
+
+	void Node::RemoveCameraComponent()
+	{
+		delete m_Camera;
+		m_Camera = nullptr;
+	}
+
+	void Node::RemoveLightComponent()
+	{
+		delete m_Light;
+		m_Light = nullptr;
 	}
 
 	Node* Node::DeepCopy(Node* node)

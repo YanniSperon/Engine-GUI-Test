@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="3D">
-      <UniqueIdentifier>{1C715900-08FD-870B-71AB-880B5D56880B}</UniqueIdentifier>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Camera">
-      <UniqueIdentifier>{142EB7AD-8098-6B24-C9D6-1CCA35804979}</UniqueIdentifier>
+    <Filter Include="Graphics\3D">
+      <UniqueIdentifier>{1C529E76-8807-176C-11FC-10437DB00D70}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Light">
-      <UniqueIdentifier>{C3E98572-AFB6-E07D-D8CF-CE25C4FB150C}</UniqueIdentifier>
+    <Filter Include="Graphics\3D\Camera">
+      <UniqueIdentifier>{14EF94CB-00D3-5521-6933-5074553640A3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Mesh">
-      <UniqueIdentifier>{58F8B6FB-C4D7-3597-CDEF-C06D394E9CF8}</UniqueIdentifier>
+    <Filter Include="Graphics\3D\Light">
+      <UniqueIdentifier>{C38A2F7B-2FA1-2D11-7818-B932E46DFE98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Object">
-      <UniqueIdentifier>{2287C5C9-8EF1-7940-D72F-2BE643D95795}</UniqueIdentifier>
+    <Filter Include="Graphics\3D\Mesh">
+      <UniqueIdentifier>{587930D5-4472-4F27-6DA4-34AC59FC2E33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Scene">
-      <UniqueIdentifier>{39430173-2510-5C7E-4E29-4A263A55910C}</UniqueIdentifier>
+    <Filter Include="Graphics\3D\Object">
+      <UniqueIdentifier>{2248A3E7-0E2C-643D-778C-5E90638F4EBF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Shader">
-      <UniqueIdentifier>{42C981D3-AE33-364A-F771-E7EF631B149F}</UniqueIdentifier>
+    <Filter Include="Graphics\3D\Scene">
+      <UniqueIdentifier>{39E4AA7B-A5FA-A811-EE71-34335AC77999}</UniqueIdentifier>
     </Filter>
-    <Filter Include="3D\Texture">
-      <UniqueIdentifier>{7CF25E8B-68AA-A0D8-D1B1-7934BD883BC9}</UniqueIdentifier>
+    <Filter Include="Graphics\3D\Shader">
+      <UniqueIdentifier>{428A5FF1-2E6E-2047-97CE-1A9A83D10AC9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\3D\Texture">
+      <UniqueIdentifier>{7CD3F464-E834-D272-71A2-1825DD020932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Renderer">
+      <UniqueIdentifier>{7C6F0F98-E885-0D2E-31FD-984F9D52DEB5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{594615A9-C525-9444-CE3D-1F1B3A9CFAA5}</UniqueIdentifier>
@@ -57,40 +63,52 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\3D\Camera\Camera.h">
-      <Filter>3D\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Light\Light.h">
-      <Filter>3D\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Mesh\DynamicMesh3D.h">
-      <Filter>3D\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Mesh\Mesh3DManager.h">
-      <Filter>3D\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Mesh\StaticMesh3D.h">
-      <Filter>3D\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Scene\Node.h">
-      <Filter>3D\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Scene\Scene.h">
-      <Filter>3D\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Shader\Shader.h">
-      <Filter>3D\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Shader\ShaderManager.h">
-      <Filter>3D\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Texture\Texture.h">
-      <Filter>3D\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3D\Texture\TextureManager.h">
-      <Filter>3D\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Global.h" />
+    <ClInclude Include="Source\Graphics\3D\Camera\Camera.h">
+      <Filter>Graphics\3D\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Light\Light.h">
+      <Filter>Graphics\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Mesh\DynamicMesh3D.h">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Mesh\Mesh3D.h">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Mesh\Mesh3DManager.h">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Mesh\StaticMesh3D.h">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Object\Object.h">
+      <Filter>Graphics\3D\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Scene\Node.h">
+      <Filter>Graphics\3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Scene\Scene.h">
+      <Filter>Graphics\3D\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Shader\Shader.h">
+      <Filter>Graphics\3D\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Shader\ShaderManager.h">
+      <Filter>Graphics\3D\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Texture\Texture.h">
+      <Filter>Graphics\3D\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\3D\Texture\TextureManager.h">
+      <Filter>Graphics\3D\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Renderer\LinearRenderer.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Graphics\Renderer\Renderer.h">
+      <Filter>Graphics\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Utility\Config.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -970,35 +988,52 @@
     <ClInclude Include="Source\Window\Window.h">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="Source\3D\Mesh\Mesh3D.h" />
-    <ClInclude Include="Source\3D\Object\Object.h">
-      <Filter>3D\Object</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\3D\Mesh\DynamicMesh3D.cpp">
-      <Filter>3D\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\3D\Mesh\Mesh3DManager.cpp">
-      <Filter>3D\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\3D\Mesh\StaticMesh3D.cpp">
-      <Filter>3D\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\3D\Shader\Shader.cpp">
-      <Filter>3D\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\3D\Shader\ShaderManager.cpp">
-      <Filter>3D\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\3D\Texture\Texture.cpp">
-      <Filter>3D\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\3D\Texture\TextureManager.cpp">
-      <Filter>3D\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Global.cpp" />
+    <ClCompile Include="Source\Graphics\3D\Camera\Camera.cpp">
+      <Filter>Graphics\3D\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Light\Light.cpp">
+      <Filter>Graphics\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Mesh\DynamicMesh3D.cpp">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Mesh\Mesh3D.cpp">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Mesh\Mesh3DManager.cpp">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Mesh\StaticMesh3D.cpp">
+      <Filter>Graphics\3D\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Object\Object.cpp">
+      <Filter>Graphics\3D\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Scene\Node.cpp">
+      <Filter>Graphics\3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Shader\Shader.cpp">
+      <Filter>Graphics\3D\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Shader\ShaderManager.cpp">
+      <Filter>Graphics\3D\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Texture\Texture.cpp">
+      <Filter>Graphics\3D\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Texture\TextureManager.cpp">
+      <Filter>Graphics\3D\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Renderer\LinearRenderer.cpp">
+      <Filter>Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\Renderer\Renderer.cpp">
+      <Filter>Graphics\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Utility\Config.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -1032,10 +1067,6 @@
     <ClCompile Include="Source\Window\Window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="Source\3D\Scene\Node.cpp" />
-    <ClCompile Include="Source\3D\Camera\Camera.cpp" />
-    <ClCompile Include="Source\3D\Mesh\Mesh3D.cpp" />
-    <ClCompile Include="Source\3D\Object\Object.cpp" />
-    <ClCompile Include="Source\3D\Light\Light.cpp" />
+    <ClCompile Include="Source\Graphics\3D\Scene\Scene.cpp" />
   </ItemGroup>
 </Project>

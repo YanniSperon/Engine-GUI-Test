@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <string>
+
 namespace AD {
 	class Camera {
 	private:
@@ -63,6 +65,8 @@ namespace AD {
 
 		void AddTranslation(const glm::vec3& translation);
 		void AddRotation(const glm::vec3& rotation);
+
+		std::string ToString();
 
 		static Camera* DeepCopy(Camera* camera);
 	};

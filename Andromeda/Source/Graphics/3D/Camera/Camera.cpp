@@ -152,7 +152,7 @@ namespace AD {
 
 	glm::mat4 Camera::GetProjectionMatrix()
 	{
-		return glm::perspective(glm::radians(Config::GetInstance()->GetFOV()), (float)Window::GetInstance()->GetWidth() / (float)Window::GetInstance()->GetHeight(), m_NearPlane, m_FarPlane);
+		return glm::perspective(glm::radians(Config::GetInstance()->GetFOV()), (float)Window::GetInstance()->GetCurrentLayer().GetWidth() / (float)Window::GetInstance()->GetCurrentLayer().GetHeight(), m_NearPlane, m_FarPlane);
 	}
 
 	glm::mat4 Camera::GetViewMatrix()
@@ -258,6 +258,11 @@ namespace AD {
 	void Camera::AddRotation(const glm::vec3& rotation)
 	{
 		m_Rotation += rotation;
+	}
+
+	std::string Camera::ToString()
+	{
+		return std::string("{Camera}        [ Rotation: (") + std::to_string(m_Rotation.x) + std::string(", ") + std::to_string(m_Rotation.y) + std::string(", ") + std::to_string(m_Rotation.z) + std::string(") ]    [ Near: ") + std::to_string(m_NearPlane) + std::string(" ]    [ Far: ") + std::to_string(m_FarPlane) + std::string(" ]    [ Movement Speed: ") + std::to_string(m_MovementSpeed) + std::string(" ]    [ Old Mouse X: ") + std::to_string(m_OldMouseX) + std::string(" ]    [ Old Mouse Y: ") + std::to_string(m_OldMouseY) + std::string(" ]    [ Was Used Yet: ") + std::to_string(m_WasUsedYet) + std::string(" ]    [ Is Focused: ") + std::to_string(m_IsFocused) + std::string(" ]");
 	}
 
 	Camera* Camera::DeepCopy(Camera* camera)
