@@ -163,6 +163,7 @@ namespace AD {
 	void Window::Prepare()
 	{
 		glfwPollEvents();
+		m_Input.Prepare();
 		for (int i = 0; i < m_Layers.size(); i++) {
 			m_Layers[i]->GetInput().Prepare();
 		}
@@ -254,6 +255,7 @@ namespace AD {
 
 	void Window::Flush()
 	{
+		m_Input.Flush();
 		for (int i = 0; i < m_Layers.size(); i++) {
 			m_Layers[i]->GetInput().Flush();
 		}
@@ -370,6 +372,21 @@ namespace AD {
 				break;
 			}
 		}
+	}
+
+	Input& Window::GetInput()
+	{
+		return m_Input;
+	}
+
+	void Window::HideMouse()
+	{
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
+	void Window::ShowMouse()
+	{
+		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	}
 
 	void Window::InitializeSingleton()

@@ -68,6 +68,11 @@ namespace AD {
 		void RemoveLayer(int index);
 		void RemoveLayer(Layer* layer);
 
+		Input& GetInput();
+
+		void HideMouse();
+		void ShowMouse();
+
 		static void InitializeSingleton();
 		static Window* GetInstance();
 		static void CleanupSingleton();

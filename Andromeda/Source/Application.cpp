@@ -18,8 +18,8 @@ int main() {
 
 	overlay->GetInput().SetShouldCaptureKeyboardInput(true);
 	overlay->GetInput().SetShouldCaptureMouseInput(true);
-	//overlay->SetShouldBlockKeyboardInput(true);
-	//overlay->SetShouldBlockMouseInput(true);
+	layer->SetShouldBlockKeyboardInput(false);
+	layer->SetShouldBlockMouseInput(false);
 
 	layer->GetInput().SetShouldCaptureKeyboardInput(true);
 	layer->GetInput().SetShouldCaptureMouseInput(true);
@@ -70,8 +70,36 @@ int main() {
 		lastTime = currentTime;
 		double deltaTimeWithoutTimeFactor = deltaTimeNanoseconds.count() / 1000000000.0;
 		double deltaTime = deltaTimeWithoutTimeFactor * timeConstant;
-
 		window->Prepare();
+
+		if (window->GetInput().GetKeyboardKeyPressed(AD_KEY_1)) {
+			overlay->GetInput().SetShouldCaptureKeyboardInput(false);
+			overlay->GetInput().SetShouldCaptureMouseInput(false);
+			overlay->SetShouldBlockKeyboardInput(false);
+			overlay->SetShouldBlockMouseInput(false);
+
+			layer->GetInput().SetShouldCaptureKeyboardInput(true);
+			layer->GetInput().SetShouldCaptureMouseInput(true);
+			layer->SetShouldBlockKeyboardInput(true);
+			layer->SetShouldBlockMouseInput(true);
+
+			window->HideMouse();
+		}
+
+		if (window->GetInput().GetKeyboardKeyPressed(AD_KEY_2)) {
+			overlay->GetInput().SetShouldCaptureKeyboardInput(true);
+			overlay->GetInput().SetShouldCaptureMouseInput(true);
+			overlay->SetShouldBlockKeyboardInput(true);
+			overlay->SetShouldBlockMouseInput(true);
+
+			layer->GetInput().SetShouldCaptureKeyboardInput(false);
+			layer->GetInput().SetShouldCaptureMouseInput(false);
+			layer->SetShouldBlockKeyboardInput(false);
+			layer->SetShouldBlockMouseInput(false);
+
+			window->ShowMouse();
+		}
+
 		window->Update(deltaTime);
 		window->Draw();
 		window->Flush();
