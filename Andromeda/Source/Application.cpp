@@ -16,15 +16,17 @@ int main() {
 	Layer3D* layer = window->AddLayer3D();
 	overlay->SetOverlayOf(layer);
 
-	overlay->GetInput().SetShouldCaptureKeyboardInput(true);
-	overlay->GetInput().SetShouldCaptureMouseInput(true);
-	layer->SetShouldBlockKeyboardInput(false);
-	layer->SetShouldBlockMouseInput(false);
+	overlay->GetInput().SetShouldCaptureKeyboardInput(false);
+	overlay->GetInput().SetShouldCaptureMouseInput(false);
+	overlay->SetShouldBlockKeyboardInput(false);
+	overlay->SetShouldBlockMouseInput(false);
 
 	layer->GetInput().SetShouldCaptureKeyboardInput(true);
 	layer->GetInput().SetShouldCaptureMouseInput(true);
 	layer->SetShouldBlockKeyboardInput(true);
 	layer->SetShouldBlockMouseInput(true);
+
+	window->HideMouse();
 
 
 
