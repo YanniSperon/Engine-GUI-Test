@@ -209,6 +209,26 @@ namespace AD {
 		m_Light = nullptr;
 	}
 
+	const glm::vec3& Node::GetTranslation()
+	{
+		return m_Translation;
+	}
+
+	const glm::vec3& Node::GetRotation()
+	{
+		return m_Rotation;
+	}
+
+	void Node::SetTranslation(const glm::vec3& translation)
+	{
+		m_Translation = translation;
+	}
+
+	void Node::SetRotation(const glm::vec3& rotation)
+	{
+		m_Rotation = rotation;
+	}
+
 	Node* Node::DeepCopy(Node* node)
 	{
 		return DeepCopyRecursive(node, true);

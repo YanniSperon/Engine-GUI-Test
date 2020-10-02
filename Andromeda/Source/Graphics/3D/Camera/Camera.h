@@ -15,10 +15,6 @@ namespace AD {
 
 		float m_MovementSpeed;
 
-		float m_OldMouseX;
-		float m_OldMouseY;
-
-		bool m_WasUsedYet;
 		bool m_IsFocused;
 	public:
 		Camera();
@@ -29,21 +25,15 @@ namespace AD {
 		void SetNearPlane(float nearPlane);
 		void SetFarPlane(float farPlane);
 		void SetMovementSpeed(float movementSpeed);
-		void SetOldMouseX(float x);
-		void SetOldMouseY(float y);
 		void SetTranslation(const glm::vec3& translation);
 		void SetUpDirection(const glm::vec3& upDirection);
-		void SetWasUsedYet(bool wasUsedYet);
 		void SetIsFocused(bool isFocused);
 
 		const float GetNearPlane();
 		const float GetFarPlane();
 		const float GetMovementSpeed();
-		const float GetOldMouseX();
-		const float GetOldMouseY();
 		const glm::vec3& GetTranslation();
 		const glm::vec3& GetRotation();
-		const bool GetWasUsedYet();
 		glm::vec3 GetUpDirection();
 		glm::vec3 GetForwardDirection();
 		glm::mat4 GetProjectionMatrix();
@@ -52,7 +42,7 @@ namespace AD {
 
 		void LookAtPosition(const glm::vec3& position);
 		void LookInDirection(const glm::vec3& forwardDirection);
-		void LookAtMouse(float sensitivity, float xPos, float yPos);
+		void LookAtMouse(float sensitivity, float xPos, float yPos, float oldXPos, float oldYPos);
 
 		void MoveForward(float deltaTime);
 		void MoveBackward(float deltaTime);
@@ -65,8 +55,6 @@ namespace AD {
 
 		void AddTranslation(const glm::vec3& translation);
 		void AddRotation(const glm::vec3& rotation);
-
-		std::string ToString();
 
 		static Camera* DeepCopy(Camera* camera);
 	};

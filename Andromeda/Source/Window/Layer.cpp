@@ -1,8 +1,8 @@
 #include "Layer.h"
 
 namespace AD {
-	Layer::Layer(LayerType type, int width, int height, int x, int y)
-		: m_Type(type), m_Input(), m_ShouldBlockMouseInput(false), m_ShouldBlockKeyboardInput(false), m_Width(width), m_Height(height), m_XPos(x), m_YPos(y)
+	Layer::Layer(LayerType type, int width, int height, int x, int y, const std::string& debugName)
+		: m_Type(type), m_Input(), m_ShouldBlockMouseInput(false), m_ShouldBlockKeyboardInput(false), m_Width(width), m_Height(height), m_XPos(x), m_YPos(y), m_DebugName(debugName), m_IsEnabled(true)
 	{
 
 	}
@@ -10,26 +10,6 @@ namespace AD {
 	Layer::~Layer()
 	{
 
-	}
-
-	void Layer::SetGetsKeyboardInput(bool doesGet)
-	{
-		if (doesGet) {
-			m_Input.StartCaptureKeyboardInput();
-		}
-		else {
-			m_Input.StopCaptureKeyboardInput();
-		}
-	}
-
-	void Layer::SetGetsMouseInput(bool doesGet)
-	{
-		if (doesGet) {
-			m_Input.StartCaptureMouseInput();
-		}
-		else {
-			m_Input.StopCaptureMouseInput();
-		}
 	}
 
 	void Layer::SetShouldBlockMouseInput(bool shouldBlock)
@@ -44,24 +24,56 @@ namespace AD {
 
 	bool Layer::DispatchKeyboardInput(uint16_t key, uint16_t event)
 	{
-		m_Input.UpdateKeyboardKey(key, event);
-		return !m_ShouldBlockKeyboardInput;
+		if (m_IsEnabled) {
+			m_Input.UpdateKeyboardKey(key, event);
+			return !m_ShouldBlockKeyboardInput;
+		}
+		else {
+			return true;
+		}
 	}
 
 	bool Layer::DispatchMouseInput(uint16_t button, uint16_t event)
 	{
-		m_Input.UpdateMouseButton(button, event);
-		return !m_ShouldBlockMouseInput;
+		if (m_IsEnabled) {
+			m_Input.UpdateMouseButton(button, event);
+			return !m_ShouldBlockMouseInput;
+		}
+		else {
+			return true;
+		}
 	}
 
-	void Layer::ProcessInput()
+	bool Layer::DispatchMouseMovement(double x, double y)
 	{
-		m_Input.Prepare();
+		if (m_IsEnabled) {
+			m_Input.MoveMouseTo(x, y);
+			return !m_ShouldBlockMouseInput;
+		}
+		else {
+			return true;
+		}
 	}
 
-	void Layer::FlushInput()
+	bool Layer::DispatchMouseScroll(double x, double y)
 	{
-		m_Input.Flush();
+		if (m_IsEnabled) {
+			m_Input.AddScrollPosition(x, y);
+			return !m_ShouldBlockMouseInput;
+		}
+		else {
+			return true;
+		}
+	}
+
+	bool Layer::DispatchKeyTyped(unsigned int keycode)
+	{
+		if (m_IsEnabled) {
+			return !m_ShouldBlockKeyboardInput;
+		}
+		else {
+			return true;
+		}
 	}
 
 	Input& Layer::GetInput()
@@ -107,6 +119,30 @@ namespace AD {
 	int Layer::GetYPos()
 	{
 		return m_YPos;
+	}
+
+	void Layer::SetDebugName(const std::string& name)
+	{
+		m_DebugName = name;
+	}
+
+	const std::string& Layer::GetDebugName()
+	{
+		return m_DebugName;
+	}
+
+	void Layer::EnableLayer()
+	{
+		m_IsEnabled = true;
+	}
+
+	void Layer::DisableLayer()
+	{
+		m_IsEnabled = false;
+		m_Input.SetShouldCaptureKeyboardInput(false);
+		m_Input.SetShouldCaptureKeyboardInput(true);
+		m_Input.SetShouldCaptureMouseInput(false);
+		m_Input.SetShouldCaptureMouseInput(true);
 	}
 
 }

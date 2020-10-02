@@ -65,6 +65,12 @@ namespace AD {
 		void RemoveCameraComponent();
 		void RemoveLightComponent();
 
+		const glm::vec3& GetTranslation();
+		const glm::vec3& GetRotation();
+
+		void SetTranslation(const glm::vec3& translation);
+		void SetRotation(const glm::vec3& rotation);
+
 		// Copies children nodes
 		static Node* DeepCopy(Node* node);
 		// Doesn't copy children nodes

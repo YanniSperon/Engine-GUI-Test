@@ -4,6 +4,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{1653CE33-0220-293F-2B39-17E717655ECD}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\2D">
+      <UniqueIdentifier>{FB519E76-6707-176C-F0FB-10435CB00D70}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Graphics\3D">
       <UniqueIdentifier>{1C529E76-8807-176C-11FC-10437DB00D70}</UniqueIdentifier>
     </Filter>
@@ -55,6 +58,12 @@
     <Filter Include="Vendor\glm\simd">
       <UniqueIdentifier>{FE44059A-6AD0-725E-73E1-F552DFEBCE5E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vendor\imgui">
+      <UniqueIdentifier>{3D8F64D2-29F2-F376-D277-2C2DBEB9BFF9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\imgui\Edited">
+      <UniqueIdentifier>{7BA4AF95-E705-8DA3-7073-D355DCD3C362}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Vendor\stb">
       <UniqueIdentifier>{6BAF7327-5767-B574-C06E-8ED0AC455065}</UniqueIdentifier>
     </Filter>
@@ -64,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Global.h" />
+    <ClInclude Include="Source\Graphics\2D\GUI.h">
+      <Filter>Graphics\2D</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Graphics\3D\Camera\Camera.h">
       <Filter>Graphics\3D\Camera</Filter>
     </ClInclude>
@@ -970,6 +982,27 @@
     <ClInclude Include="Source\Vendor\glm\vector_relational.hpp">
       <Filter>Vendor\glm</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\Edited\ImGuiOpenGLRenderer.h">
+      <Filter>Vendor\imgui\Edited</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\imconfig.h">
+      <Filter>Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\imgui.h">
+      <Filter>Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\imgui_internal.h">
+      <Filter>Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\imstb_rectpack.h">
+      <Filter>Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\imstb_textedit.h">
+      <Filter>Vendor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vendor\imgui\imstb_truetype.h">
+      <Filter>Vendor\imgui</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Vendor\stb\stb_image.h">
       <Filter>Vendor\stb</Filter>
     </ClInclude>
@@ -992,6 +1025,9 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Global.cpp" />
+    <ClCompile Include="Source\Graphics\2D\GUI.cpp">
+      <Filter>Graphics\2D</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Graphics\3D\Camera\Camera.cpp">
       <Filter>Graphics\3D\Camera</Filter>
     </ClCompile>
@@ -1014,6 +1050,9 @@
       <Filter>Graphics\3D\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\3D\Scene\Node.cpp">
+      <Filter>Graphics\3D\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\3D\Scene\Scene.cpp">
       <Filter>Graphics\3D\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\3D\Shader\Shader.cpp">
@@ -1049,6 +1088,21 @@
     <ClCompile Include="Source\Vendor\glm\detail\glm.cpp">
       <Filter>Vendor\glm\detail</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Vendor\imgui\Edited\ImGuiOpenGLRenderer.cpp">
+      <Filter>Vendor\imgui\Edited</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vendor\imgui\imgui.cpp">
+      <Filter>Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vendor\imgui\imgui_demo.cpp">
+      <Filter>Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vendor\imgui\imgui_draw.cpp">
+      <Filter>Vendor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vendor\imgui\imgui_widgets.cpp">
+      <Filter>Vendor\imgui</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Vendor\stb\stb_image.cpp">
       <Filter>Vendor\stb</Filter>
     </ClCompile>
@@ -1067,6 +1121,5 @@
     <ClCompile Include="Source\Window\Window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Graphics\3D\Scene\Scene.cpp" />
   </ItemGroup>
 </Project>

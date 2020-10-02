@@ -2,6 +2,7 @@
 #include "Console.h"
 #include "Config.h"
 #include "Renderer.h"
+#include "GUI.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -30,8 +31,11 @@ namespace AD {
 	}
 
 	Window::Window(const std::string& name, int width, int height)
-		: m_Width(width), m_Height(height), m_Window(nullptr), m_CursorXPos(0), m_CursorYPos(0), m_HasVSync(Config::GetInstance()->GetHasVSync()), m_Layers(), m_CurrentLayer(0), m_HasRawMouseMotion(Config::GetInstance()->GetHasRawMouseInput()), m_MouseMoved(false)
+		: m_Width(width), m_Height(height), m_Window(nullptr), m_HasVSync(Config::GetInstance()->GetHasVSync()), m_Layers(), m_CurrentLayer(0), m_HasRawMouseMotion(Config::GetInstance()->GetHasRawMouseInput()), m_Input()
 	{
+		//////////////////////////////////////////////////////////////////////////////////////////////
+		m_Input.SetShouldCaptureKeyboardInput(true);
+		m_Input.SetShouldCaptureMouseInput(true);
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		Console::Assert(glfwInit(), "Failed GLFW Initialization!");
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -52,7 +56,6 @@ namespace AD {
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_CCW);
-		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		if (glfwRawMouseMotionSupported() && m_HasRawMouseMotion) {
 			glfwSetInputMode(m_Window, GLFW_RAW_MOUSE_MOTION, 1);
@@ -72,9 +75,8 @@ namespace AD {
 		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
 			{
 				Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
-				windowClass.SetCursorX(xPos);
-				windowClass.SetCursorY(yPos);
-				windowClass.SetMouseMoved(true);
+
+				windowClass.SetCursorPosition(xPos, yPos);
 			}
 		);
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -121,12 +123,39 @@ namespace AD {
 
 				windowClass.SetWidth(width);
 				windowClass.SetHeight(height);
+
+				GUI::GetInstance()->Resize(width, height);
+			}
+		);
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+			{
+				Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
+
+				windowClass.DispatchKeyTyped(keycode);
+			}
+		);
+		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
+			{
+				Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
+
+				windowClass.DispatchMouseScroll(xOffset, yOffset);
+			}
+		);
+		glfwSetCursorEnterCallback(m_Window, [](GLFWwindow* window, int entered)
+			{
+				Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
+
+				windowClass.DispatchCursorEnterLeave(entered);
 			}
 		);
 	}
 
 	Window::~Window()
 	{
+		for (int i = 0; i < m_Layers.size(); i++) {
+			delete m_Layers[i];
+		}
+
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}
@@ -135,13 +164,14 @@ namespace AD {
 	{
 		glfwPollEvents();
 		for (int i = 0; i < m_Layers.size(); i++) {
-			m_Layers[i]->ProcessInput();
+			m_Layers[i]->GetInput().Prepare();
 		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void Window::DispatchMouseInput(uint16_t button, uint16_t event)
 	{
+		m_Input.UpdateMouseButton(button, event);
 		for (int i = 0; i < m_Layers.size(); i++) {
 			if (!m_Layers[i]->DispatchMouseInput(button, event)) {
 				break;
@@ -151,6 +181,7 @@ namespace AD {
 
 	void Window::DispatchKeyboardInput(uint16_t button, uint16_t event)
 	{
+		m_Input.UpdateKeyboardKey(button, event);
 		for (int i = 0; i < m_Layers.size(); i++) {
 			if (!m_Layers[i]->DispatchKeyboardInput(button, event)) {
 				break;
@@ -158,14 +189,57 @@ namespace AD {
 		}
 	}
 
+	void Window::DispatchMouseMovement()
+	{
+		bool wasBlocked = false;
+		for (int i = 0; i < m_Layers.size(); i++) {
+			if (!wasBlocked) {
+				if (!m_Layers[i]->DispatchMouseMovement(m_Input.GetMousePositionX(), m_Input.GetMousePositionY())) {
+					wasBlocked = true;
+				}
+			}
+			else {
+				m_Layers[i]->GetInput().SetMouseWasBlocked(true);
+			}
+		}
+	}
+
+	void Window::DispatchMouseScroll(double x, double y)
+	{
+		m_Input.AddScrollPosition(x, y);
+		for (int i = 0; i < m_Layers.size(); i++) {
+			if (!m_Layers[i]->DispatchMouseScroll(x, y)) {
+				break;
+			}
+		}
+	}
+
+	void Window::DispatchKeyTyped(unsigned int keycode)
+	{
+		for (int i = 0; i < m_Layers.size(); i++) {
+			if (!m_Layers[i]->DispatchKeyTyped(keycode)) {
+				break;
+			}
+		}
+	}
+
+	void Window::DispatchCursorEnterLeave(int didEnter)
+	{
+		m_Input.SetMouseWasBlocked(true);
+		for (int i = 0; i < m_Layers.size(); i++) {
+			m_Layers[i]->GetInput().SetMouseWasBlocked(true);
+		}
+	}
+
 	void Window::Update(float deltaTime)
 	{
+		DispatchMouseMovement();
+		GUI::GetInstance()->UpdateWindow(deltaTime);
 		for (int i = 0; i < m_Layers.size(); i++) {
 			m_CurrentLayer = i;
 			m_Layers[i]->Update(deltaTime);
 		}
 		m_CurrentLayer = 0;
-		m_MouseMoved = false;
 	}
 
 	void Window::Draw()
@@ -181,23 +255,29 @@ namespace AD {
 	void Window::Flush()
 	{
 		for (int i = 0; i < m_Layers.size(); i++) {
-			m_Layers[i]->FlushInput();
+			m_Layers[i]->GetInput().Flush();
 		}
 	}
 
-	void Window::AddLayer2D()
+	Layer2D* Window::AddLayer2D()
 	{
-		m_Layers.push_back(std::move(std::make_unique<Layer2D>(m_Width, m_Height, 0, 0)));
+		Layer2D* tempLayer = new Layer2D(m_Width, m_Height, 0, 0);
+		m_Layers.push_back(tempLayer);
+		return tempLayer;
 	}
 
-	void Window::AddLayer3D()
+	Layer3D* Window::AddLayer3D()
 	{
-		m_Layers.push_back(std::move(std::make_unique<Layer3D>(m_Width, m_Height, 0, 0)));
+		Layer3D* tempLayer = new Layer3D(m_Width, m_Height, 0, 0);
+		m_Layers.push_back(tempLayer);
+		return tempLayer;
 	}
 
-	void Window::AddLayerCustom(LayerType type, const std::function<void(float)>& customUpdateCode, const std::function<void()>& customDrawCode)
+	LayerCustom* Window::AddLayerCustom(const std::function<void(float)>& customUpdateCode, const std::function<void()>& customDrawCode)
 	{
-		m_Layers.push_back(std::move(std::make_unique<LayerCustom>(type, customUpdateCode, customDrawCode, m_Width, m_Height, 0, 0)));
+		LayerCustom* tempLayer = new LayerCustom(customUpdateCode, customDrawCode, m_Width, m_Height, 0, 0);
+		m_Layers.push_back(tempLayer);
+		return tempLayer;
 	}
 
 	int Window::GetCurrentLayerIndex()
@@ -218,21 +298,6 @@ namespace AD {
 	bool Window::GetHasVSync()
 	{
 		return m_HasVSync;
-	}
-
-	double Window::GetCursorX()
-	{
-		return m_CursorXPos;
-	}
-
-	double Window::GetCursorY()
-	{
-		return m_CursorYPos;
-	}
-
-	bool Window::GetMouseMoved()
-	{
-		return m_MouseMoved;
 	}
 
 	void Window::SetVSync(bool vsync)
@@ -275,19 +340,36 @@ namespace AD {
 		return m_Window;
 	}
 
-	Layer& Window::GetLayer(int index)
+	Layer* Window::GetLayer(int index)
 	{
-		return *m_Layers[index];
+		return m_Layers[index];
 	}
 
-	Layer& Window::GetCurrentLayer()
+	Layer* Window::GetCurrentLayer()
 	{
-		return *m_Layers[m_CurrentLayer];
+		return m_Layers[m_CurrentLayer];
 	}
 
-	Layer& Window::GetLastLayer()
+	Layer* Window::GetLastLayer()
 	{
-		return *m_Layers[m_Layers.size() - 1];
+		return m_Layers[m_Layers.size() - 1];
+	}
+
+	void Window::RemoveLayer(int index)
+	{
+		delete m_Layers[index];
+		m_Layers.erase(m_Layers.begin() + index);
+	}
+
+	void Window::RemoveLayer(Layer* layer)
+	{
+		for (int i = 0; i < m_Layers.size(); i++) {
+			if (layer == m_Layers[i]) {
+				delete m_Layers[i];
+				m_Layers.erase(m_Layers.begin() + i);
+				break;
+			}
+		}
 	}
 
 	void Window::InitializeSingleton()
@@ -305,14 +387,9 @@ namespace AD {
 		delete s_Window;
 	}
 
-	void Window::SetCursorX(double x)
+	void Window::SetCursorPosition(double x, double y)
 	{
-		m_CursorXPos = x;
-	}
-
-	void Window::SetCursorY(double y)
-	{
-		m_CursorYPos = y;
+		m_Input.MoveMouseTo(x, y);
 	}
 
 	void Window::SetWidth(int x)
@@ -323,10 +400,5 @@ namespace AD {
 	void Window::SetHeight(int y)
 	{
 		m_Height = y;
-	}
-
-	void Window::SetMouseMoved(bool didMove)
-	{
-		m_MouseMoved = didMove;
 	}
 }

@@ -8,6 +8,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "LinearRenderer.h"
+#include "GUI.h"
 
 #include <memory>
 
@@ -27,6 +28,7 @@ namespace AD
 		ShaderManager::InitializeSingleton();
 		Window::InitializeSingleton();
 		Renderer::InitializeSingleton(new LinearRenderer());
+		GUI::InitializeSingleton();
 	}
 
 	std::chrono::steady_clock::time_point& AD::Global::GetStartTime()

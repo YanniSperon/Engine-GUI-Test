@@ -3,41 +3,45 @@
 #include "Input.h"
 
 #include <cstdint>
+#include <string>
 
 namespace AD {
 	enum class LayerType : uint16_t {
 		TWOD = 0,
-		THREED = 1
+		THREED = 1,
+		CUSTOM = 2
 	};
 
 	class Layer {
-	private:
-		LayerType m_Type;
 	protected:
 		Input m_Input;
 		bool m_ShouldBlockMouseInput;
 		bool m_ShouldBlockKeyboardInput;
+		bool m_IsEnabled;
 
 		int m_Width;
 		int m_Height;
 		int m_XPos;
 		int m_YPos;
-	public:
-		Layer(LayerType type, int width, int height, int x, int y);
-		~Layer();
 
-		void SetGetsKeyboardInput(bool doesWant);
-		void SetGetsMouseInput(bool doesWant);
+		std::string m_DebugName;
+
+		LayerType m_Type;
+	public:
+		Layer(LayerType type, int width, int height, int x, int y, const std::string& debugName);
+		virtual ~Layer();
 
 		void SetShouldBlockMouseInput(bool shouldBlock);
 		void SetShouldBlockKeyboardInput(bool shouldBlock);
 
-		bool DispatchKeyboardInput(uint16_t key, uint16_t event);
-		bool DispatchMouseInput(uint16_t button, uint16_t event);
-		void ProcessInput();
+		virtual bool DispatchKeyboardInput(uint16_t key, uint16_t event);
+		virtual bool DispatchMouseInput(uint16_t button, uint16_t event);
+		virtual bool DispatchMouseMovement(double x, double y);
+		virtual bool DispatchMouseScroll(double x, double y);
+		virtual bool DispatchKeyTyped(unsigned int keycode);
+
 		virtual void Update(float deltaTime) = 0;
 		virtual void Draw() = 0;
-		void FlushInput();
 
 		Input& GetInput();
 
@@ -50,5 +54,11 @@ namespace AD {
 		int GetHeight();
 		int GetXPos();
 		int GetYPos();
+
+		void SetDebugName(const std::string& name);
+		const std::string& GetDebugName();
+
+		void EnableLayer();
+		void DisableLayer();
 	};
 }

@@ -12,16 +12,50 @@ int main() {
 
 	Window* window = Window::GetInstance();
 
-	window->AddLayer3D();
-	window->GetLastLayer().SetGetsKeyboardInput(true);
-	window->GetLastLayer().SetGetsMouseInput(true);
-	window->GetLastLayer().SetShouldBlockKeyboardInput(true);
-	window->GetLastLayer().SetShouldBlockMouseInput(true);
+	Layer2D* overlay = window->AddLayer2D();
+	Layer3D* layer = window->AddLayer3D();
+	overlay->SetOverlayOf(layer);
 
-	//Object* temp = new Object("Resources/Cube.obj", "Resources/Basic", "Resources/Basic.png", false);
-	//temp->SetTranslation(glm::vec3(0.0f, 0.0f, 5.0f));
-	//Camera* cam = new Camera();
-	//cam->SetIsFocused(true);
+	overlay->GetInput().SetShouldCaptureKeyboardInput(true);
+	overlay->GetInput().SetShouldCaptureMouseInput(true);
+	//overlay->SetShouldBlockKeyboardInput(true);
+	//overlay->SetShouldBlockMouseInput(true);
+
+	layer->GetInput().SetShouldCaptureKeyboardInput(true);
+	layer->GetInput().SetShouldCaptureMouseInput(true);
+	layer->SetShouldBlockKeyboardInput(true);
+	layer->SetShouldBlockMouseInput(true);
+
+
+
+
+
+
+
+
+
+
+
+
+	Node* tempNode = new Node();
+	Object* temp = new Object("Resources/Cube.obj", "Resources/Basic", "Resources/Basic.png", false);
+	temp->SetTranslation(glm::vec3(0.0f, 0.0f, 5.0f));
+	tempNode->AddObjectComponent(temp);
+	layer->GetScene().AddNode(tempNode);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	double timeConstant = 1.0;
 	auto lastTime = std::chrono::high_resolution_clock::now();
@@ -38,9 +72,7 @@ int main() {
 		double deltaTime = deltaTimeWithoutTimeFactor * timeConstant;
 
 		window->Prepare();
-		//cam->Update(deltaTime);
 		window->Update(deltaTime);
-		//temp->Draw(cam->GetProjectionMatrix(), cam->GetViewMatrix(), glm::mat4(1.0f));
 		window->Draw();
 		window->Flush();
 

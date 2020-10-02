@@ -10,7 +10,7 @@
 
 namespace AD {
 	Camera::Camera()
-		: m_NearPlane(0.1f), m_FarPlane(250.0f), m_MovementSpeed(5.0f), m_OldMouseX(0.0f), m_OldMouseY(0.0f), m_Translation(0.0f), m_WasUsedYet(false), m_IsFocused(false), m_Rotation(-270.0f, 0.0f, 0.0f)
+		: m_NearPlane(0.1f), m_FarPlane(250.0f), m_MovementSpeed(5.0f), m_Translation(0.0f), m_IsFocused(false), m_Rotation(-270.0f, 0.0f, 0.0f)
 	{
 
 	}
@@ -24,8 +24,8 @@ namespace AD {
 	{
 		if (m_IsFocused) {
 			Window* window = Window::GetInstance();
-			Layer& currentLayer = window->GetCurrentLayer();
-			Input& input = currentLayer.GetInput();
+			Layer* currentLayer = window->GetCurrentLayer();
+			Input& input = currentLayer->GetInput();
 
 			if (input.GetKeyboardKeyHeld(AD_KEY_W)) {
 				MoveForward(deltaTime);
@@ -46,12 +46,7 @@ namespace AD {
 				MoveUp(deltaTime);
 			}
 
-			if (window->GetMouseMoved()) {
-				LookAtMouse(Config::GetInstance()->GetMouseSensitivity(), Window::GetInstance()->GetCursorX(), Window::GetInstance()->GetCursorY());
-			}
-		}
-		else {
-			m_WasUsedYet = false;
+			LookAtMouse(Config::GetInstance()->GetMouseSensitivity(), input.GetMousePositionX(), input.GetMousePositionY(), input.GetOldMousePositionX(), input.GetOldMousePositionY());
 		}
 	}
 
@@ -70,16 +65,6 @@ namespace AD {
 		m_MovementSpeed = movementSpeed;
 	}
 
-	void Camera::SetOldMouseX(float x)
-	{
-		m_OldMouseX = x;
-	}
-
-	void Camera::SetOldMouseY(float y)
-	{
-		m_OldMouseY = y;
-	}
-
 	void Camera::SetTranslation(const glm::vec3& translation)
 	{
 		m_Translation = translation;
@@ -88,11 +73,6 @@ namespace AD {
 	void Camera::SetUpDirection(const glm::vec3& upDirection)
 	{
 		m_Rotation.z = glm::degrees(glm::acos(glm::dot(glm::vec3(0.0f, 1.0f, 0.0f), upDirection)));
-	}
-
-	void Camera::SetWasUsedYet(bool wasUsedYet)
-	{
-		m_WasUsedYet = wasUsedYet;
 	}
 
 	void Camera::SetIsFocused(bool isFocused)
@@ -115,16 +95,6 @@ namespace AD {
 		return m_MovementSpeed;
 	}
 
-	const float Camera::GetOldMouseX()
-	{
-		return m_OldMouseX;
-	}
-
-	const float Camera::GetOldMouseY()
-	{
-		return m_OldMouseY;
-	}
-
 	const glm::vec3& Camera::GetTranslation()
 	{
 		return m_Translation;
@@ -140,11 +110,6 @@ namespace AD {
 		return glm::rotateZ(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(-m_Rotation.z));
 	}
 
-	const bool Camera::GetWasUsedYet()
-	{
-		return m_WasUsedYet;
-	}
-
 	glm::vec3 Camera::GetForwardDirection()
 	{
 		return glm::normalize(glm::vec3(glm::cos(glm::radians(m_Rotation.x)) * glm::cos(glm::radians(m_Rotation.y)), glm::sin(glm::radians(m_Rotation.y)), glm::sin(glm::radians(m_Rotation.x)) * glm::cos(glm::radians(m_Rotation.y))));
@@ -152,7 +117,7 @@ namespace AD {
 
 	glm::mat4 Camera::GetProjectionMatrix()
 	{
-		return glm::perspective(glm::radians(Config::GetInstance()->GetFOV()), (float)Window::GetInstance()->GetCurrentLayer().GetWidth() / (float)Window::GetInstance()->GetCurrentLayer().GetHeight(), m_NearPlane, m_FarPlane);
+		return glm::perspective(glm::radians(Config::GetInstance()->GetFOV()), (float)Window::GetInstance()->GetCurrentLayer()->GetWidth() / (float)Window::GetInstance()->GetCurrentLayer()->GetHeight(), m_NearPlane, m_FarPlane);
 	}
 
 	glm::mat4 Camera::GetViewMatrix()
@@ -179,17 +144,10 @@ namespace AD {
 		m_Rotation.y = glm::degrees(-glm::asin(forwardDirection.y));
 	}
 
-	void Camera::LookAtMouse(float sensitivity, float xPos, float yPos)
+	void Camera::LookAtMouse(float sensitivity, float xPos, float yPos, float oldXPos, float oldYPos)
 	{
-		if (!m_WasUsedYet) {
-			m_OldMouseX = xPos;
-			m_OldMouseY = yPos;
-			m_WasUsedYet = true;
-		}
-		float xOffset = xPos - m_OldMouseX;
-		float yOffset = m_OldMouseY - yPos;
-		m_OldMouseX = xPos;
-		m_OldMouseY = yPos;
+		float xOffset = xPos - oldXPos;
+		float yOffset = oldYPos - yPos;
 		m_Rotation.x += xOffset * sensitivity;
 		m_Rotation.y += yOffset * sensitivity;
 
@@ -258,11 +216,6 @@ namespace AD {
 	void Camera::AddRotation(const glm::vec3& rotation)
 	{
 		m_Rotation += rotation;
-	}
-
-	std::string Camera::ToString()
-	{
-		return std::string("{Camera}        [ Rotation: (") + std::to_string(m_Rotation.x) + std::string(", ") + std::to_string(m_Rotation.y) + std::string(", ") + std::to_string(m_Rotation.z) + std::string(") ]    [ Near: ") + std::to_string(m_NearPlane) + std::string(" ]    [ Far: ") + std::to_string(m_FarPlane) + std::string(" ]    [ Movement Speed: ") + std::to_string(m_MovementSpeed) + std::string(" ]    [ Old Mouse X: ") + std::to_string(m_OldMouseX) + std::string(" ]    [ Old Mouse Y: ") + std::to_string(m_OldMouseY) + std::string(" ]    [ Was Used Yet: ") + std::to_string(m_WasUsedYet) + std::string(" ]    [ Is Focused: ") + std::to_string(m_IsFocused) + std::string(" ]");
 	}
 
 	Camera* Camera::DeepCopy(Camera* camera)

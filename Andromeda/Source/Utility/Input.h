@@ -39,8 +39,19 @@ namespace AD {
 		std::vector<InputStateChange> m_PendingMouseStateChanges;
 		std::vector<InputStateChange> m_PendingKeyboardStateChanges;
 
+		double m_ScrollXPos;
+		double m_ScrollYPos;
+
+		double m_CurrentMouseXPos;
+		double m_CurrentMouseYPos;
+
+		double m_OldMouseXPos;
+		double m_OldMouseYPos;
+
 		bool m_ShouldCaptureMouseInput;
 		bool m_ShouldCaptureKeyboardInput;
+
+		bool m_MouseWasBlocked;
 	public:
 		Input();
 		~Input();
@@ -59,15 +70,31 @@ namespace AD {
 		bool GetMouseButtonReleased(uint16_t button);
 		void UpdateMouseButton(uint16_t button, uint16_t event);
 
+		void SetOldMousePosition(double x, double y);
+		void SetMousePosition(double x, double y);
+		void MoveMouseTo(double x, double y);
+
+		void AddScrollPosition(double x, double y);
+
+		double GetOldMousePositionX();
+		double GetOldMousePositionY();
+		double GetMousePositionX();
+		double GetMousePositionY();
+		double GetScrollPositionX();
+		double GetScrollPositionY();
+
+		bool GetShouldCaptureMouse();
+		bool GetShouldCaptureKeyboard();
+
 		// Put at the top of the run loop
 		void Prepare();
 		// Put at the bottom of the run loop
 		void Flush();
 
-		void StopCaptureMouseInput();
-		void StartCaptureMouseInput();
-		void StopCaptureKeyboardInput();
-		void StartCaptureKeyboardInput();
+		void SetShouldCaptureMouseInput(bool shouldCapture);
+		void SetShouldCaptureKeyboardInput(bool shouldCapture);
+
+		void SetMouseWasBlocked(bool mouseWasBlocked);
 	};
 }
 

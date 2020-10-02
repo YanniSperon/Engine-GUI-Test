@@ -10,10 +10,10 @@ namespace AD {
 		std::function<void(float)> m_CustomUpdateCode;
 		std::function<void()> m_CustomDrawCode;
 	public:
-		LayerCustom(LayerType type, const std::function<void(float)>& customUpdateCode, const std::function<void()>& customDrawCode, int width, int height, int x, int y);
-		~LayerCustom();
+		LayerCustom(const std::function<void(float)>& customUpdateCode, const std::function<void()>& customDrawCode, int width, int height, int x, int y);
+		virtual ~LayerCustom() override;
 
-		void Update(float deltaTime) override;
-		void Draw() override;
+		virtual void Update(float deltaTime) override;
+		virtual void Draw() override;
 	};
 }
