@@ -76,6 +76,15 @@ namespace AD {
 		}
 	}
 
+	void Layer::DispatchWindowResize(int width, int height)
+	{
+		m_XPos = (int)(((double)width / (double)m_Width) * (double)m_XPos);
+		m_YPos = (int)(((double)height / (double)m_Height) * (double)m_YPos);
+
+		m_Width = width;
+		m_Height = height;
+	}
+
 	Input& Layer::GetInput()
 	{
 		return m_Input;

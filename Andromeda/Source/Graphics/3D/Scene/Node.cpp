@@ -23,6 +23,9 @@ namespace AD {
 
 	Node::~Node()
 	{
+		delete m_Object;
+		delete m_Camera;
+		delete m_Light;
 		for (int i = 0; i < m_Children.size(); i++) {
 			delete m_Children[i];
 		}
@@ -104,6 +107,67 @@ namespace AD {
 		child->m_Parent = this;
 	}
 
+	void Node::CreateChild()
+	{
+		new Node(this);
+	}
+
+	void Node::MoveNode(Node* newParent)
+	{
+		m_Parent->RemoveChild(this);
+		m_Parent->AddChild(this);
+	}
+
+	Node* Node::RemoveChild(Node* child)
+	{
+		for (int i = 0; i < m_Children.size(); i++) {
+			if (m_Children[i] == child) {
+				Node* temp = m_Children[i];
+				m_Children.erase(m_Children.begin() + i);
+				return temp;
+			}
+		}
+		return nullptr;
+	}
+
+	Node* Node::RemoveChild(int id)
+	{
+		for (int i = 0; i < m_Children.size(); i++) {
+			if (m_Children[i]->GetID() == id) {
+				Node* temp = m_Children[i];
+				m_Children.erase(m_Children.begin() + i);
+				return temp;
+			}
+		}
+		return nullptr;
+	}
+
+	void Node::DeleteChild(Node* child)
+	{
+		for (int i = 0; i < m_Children.size(); i++) {
+			if (m_Children[i] == child) {
+				delete m_Children[i];
+				m_Children.erase(m_Children.begin() + i);
+			}
+		}
+	}
+
+	void Node::DeleteChild(int id)
+	{
+		for (int i = 0; i < m_Children.size(); i++) {
+			if (m_Children[i]->GetID() == id) {
+				delete m_Children[i];
+				m_Children.erase(m_Children.begin() + i);
+			}
+		}
+	}
+
+	void Node::RemoveFromParent()
+	{
+		m_Parent->RemoveChild(this);
+		m_Parent = nullptr;
+	}
+
 	Node* Node::SearchParentAndChildrenForNode(int id)
 	{
 		Node* rootNode = this;
@@ -161,6 +225,25 @@ namespace AD {
 		return m_Light;
 	}
 
+	int Node::GetID()
+	{
+		return m_ID;
+	}
+
+	std::vector<Node*>& Node::GetChildren()
+	{
+		return m_Children;
+	}
+
+	int Node::GetNumNodes()
+	{
+		int count = 1;
+		for (int i = 0; i < m_Children.size(); i++) {
+			count += m_Children[i]->GetNumNodes();
+		}
+		return count;
+	}
+
 	bool Node::GetHasObjectComponent()
 	{
 		return m_Object;
@@ -209,6 +292,16 @@ namespace AD {
 		m_Light = nullptr;
 	}
 
+	glm::vec3& Node::GetTranslationRef()
+	{
+		return m_Translation;
+	}
+
+	glm::vec3& Node::GetRotationRef()
+	{
+		return m_Rotation;
+	}
+
 	const glm::vec3& Node::GetTranslation()
 	{
 		return m_Translation;
@@ -227,6 +320,14 @@ namespace AD {
 	void Node::SetRotation(const glm::vec3& rotation)
 	{
 		m_Rotation = rotation;
+	}
+
+	Node* Node::DeepCopyTo(Node* node, Node* resultingParent)
+	{
+		Node* temp = DeepCopyRecursive(node, true);
+		temp->RemoveFromParent();
+		resultingParent->AddChild(temp);
+		return temp;
 	}
 
 	Node* Node::DeepCopy(Node* node)

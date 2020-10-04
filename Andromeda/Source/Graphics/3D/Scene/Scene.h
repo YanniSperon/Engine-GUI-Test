@@ -23,5 +23,7 @@ namespace AD {
 		Node* GetNodeByID(int id);
 
 		void SetActiveCamera(Node* newCameraNode);
+
+		int GetNumNodes();
 	};
 }

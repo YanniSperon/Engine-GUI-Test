@@ -47,4 +47,9 @@ namespace AD {
 	{
 		m_ActiveCameraNode = newCameraNode;
 	}
+
+	int Scene::GetNumNodes()
+	{
+		return m_RootNode->GetNumNodes() + 1;
+	}
 }

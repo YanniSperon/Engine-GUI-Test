@@ -31,7 +31,7 @@ namespace AD {
 	}
 
 	Window::Window(const std::string& name, int width, int height)
-		: m_Width(width), m_Height(height), m_Window(nullptr), m_HasVSync(Config::GetInstance()->GetHasVSync()), m_Layers(), m_CurrentLayer(0), m_HasRawMouseMotion(Config::GetInstance()->GetHasRawMouseInput()), m_Input()
+		: m_Width(width), m_Height(height), m_Window(nullptr), m_HasVSync(Config::GetInstance()->GetHasVSync()), m_Layers(), m_CurrentLayer(0), m_HasRawMouseMotion(Config::GetInstance()->GetHasRawMouseInput()), m_Input(), m_DidMouseMove(false)
 	{
 		//////////////////////////////////////////////////////////////////////////////////////////////
 		m_Input.SetShouldCaptureKeyboardInput(true);
@@ -76,7 +76,7 @@ namespace AD {
 			{
 				Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
 
-				windowClass.SetCursorPosition(xPos, yPos);
+				windowClass.DispatchMouseMovement(xPos, yPos);
 			}
 		);
 		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
@@ -121,10 +121,7 @@ namespace AD {
 			{
 				Window& windowClass = *(Window*)glfwGetWindowUserPointer(window);
 
-				windowClass.SetWidth(width);
-				windowClass.SetHeight(height);
-
-				GUI::GetInstance()->Resize(width, height);
+				windowClass.DispatchWindowResize(width, height);
 			}
 		);
 		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
@@ -190,8 +187,10 @@ namespace AD {
 		}
 	}
 
-	void Window::DispatchMouseMovement()
+	void Window::DispatchMouseMovement(double x, double y)
 	{
+		m_DidMouseMove = true;
+		m_Input.MoveMouseTo(x, y);
 		bool wasBlocked = false;
 		for (int i = 0; i < m_Layers.size(); i++) {
 			if (!wasBlocked) {
@@ -232,15 +231,24 @@ namespace AD {
 		}
 	}
 
+	void Window::DispatchWindowResize(int width, int height)
+	{
+		m_Width = width;
+		m_Height = height;
+		for (int i = 0; i < m_Layers.size(); i++) {
+			m_Layers[i]->DispatchWindowResize(width, height);
+		}
+	}
+
 	void Window::Update(float deltaTime)
 	{
-		DispatchMouseMovement();
 		GUI::GetInstance()->UpdateWindow(deltaTime);
 		for (int i = 0; i < m_Layers.size(); i++) {
 			m_CurrentLayer = i;
 			m_Layers[i]->Update(deltaTime);
 		}
 		m_CurrentLayer = 0;
+		m_DidMouseMove = false;
 	}
 
 	void Window::Draw()
@@ -261,9 +269,9 @@ namespace AD {
 		}
 	}
 
-	Layer2D* Window::AddLayer2D()
+	Layer2D* Window::AddLayer2D(Layer2DType layer2DType)
 	{
-		Layer2D* tempLayer = new Layer2D(m_Width, m_Height, 0, 0);
+		Layer2D* tempLayer = new Layer2D(layer2DType, m_Width, m_Height, 0, 0);
 		m_Layers.push_back(tempLayer);
 		return tempLayer;
 	}
@@ -300,6 +308,11 @@ namespace AD {
 	bool Window::GetHasVSync()
 	{
 		return m_HasVSync;
+	}
+
+	bool Window::GetDidMouseMove()
+	{
+		return m_DidMouseMove;
 	}
 
 	void Window::SetVSync(bool vsync)
@@ -402,11 +415,6 @@ namespace AD {
 	void Window::CleanupSingleton()
 	{
 		delete s_Window;
-	}
-
-	void Window::SetCursorPosition(double x, double y)
-	{
-		m_Input.MoveMouseTo(x, y);
 	}
 
 	void Window::SetWidth(int x)

@@ -46,7 +46,9 @@ namespace AD {
 				MoveUp(deltaTime);
 			}
 
-			LookAtMouse(Config::GetInstance()->GetMouseSensitivity(), input.GetMousePositionX(), input.GetMousePositionY(), input.GetOldMousePositionX(), input.GetOldMousePositionY());
+			if (Window::GetInstance()->GetDidMouseMove()) {
+				LookAtMouse(Config::GetInstance()->GetMouseSensitivity(), input.GetMousePositionX(), input.GetMousePositionY(), input.GetOldMousePositionX(), input.GetOldMousePositionY());
+			}
 		}
 	}
 
@@ -101,6 +103,16 @@ namespace AD {
 	}
 
 	const glm::vec3& Camera::GetRotation()
+	{
+		return m_Rotation;
+	}
+
+	glm::vec3& Camera::GetTranslationRef()
+	{
+		return m_Translation;
+	}
+
+	glm::vec3& Camera::GetRotationRef()
 	{
 		return m_Rotation;
 	}

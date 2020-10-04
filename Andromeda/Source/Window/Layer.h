@@ -39,6 +39,7 @@ namespace AD {
 		virtual bool DispatchMouseMovement(double x, double y);
 		virtual bool DispatchMouseScroll(double x, double y);
 		virtual bool DispatchKeyTyped(unsigned int keycode);
+		virtual void DispatchWindowResize(int width, int height);
 
 		virtual void Update(float deltaTime) = 0;
 		virtual void Draw() = 0;

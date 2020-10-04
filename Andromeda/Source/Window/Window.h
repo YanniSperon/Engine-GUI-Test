@@ -24,9 +24,9 @@ namespace AD {
 		int m_CurrentLayer;
 		bool m_HasVSync;
 		bool m_HasRawMouseMotion;
+		bool m_DidMouseMove;
 		Input m_Input;
 
-		void SetCursorPosition(double x, double y);
 		void SetWidth(int x);
 		void SetHeight(int y);
 	public:
@@ -36,15 +36,17 @@ namespace AD {
 		void Prepare();
 		void DispatchMouseInput(uint16_t button, uint16_t event);
 		void DispatchKeyboardInput(uint16_t button, uint16_t event);
-		void DispatchMouseMovement();
+		void DispatchMouseMovement(double x, double y);
 		void DispatchMouseScroll(double x, double y);
 		void DispatchKeyTyped(unsigned int keycode);
 		void DispatchCursorEnterLeave(int didEnter);
+		void DispatchWindowResize(int width, int height);
+
 		void Update(float deltaTime);
 		void Draw();
 		void Flush();
 
-		Layer2D* AddLayer2D();
+		Layer2D* AddLayer2D(Layer2DType layer2DType);
 		Layer3D* AddLayer3D();
 		LayerCustom* AddLayerCustom(const std::function<void(float)>& customUpdateCode, const std::function<void()>& customDrawCode);
 
@@ -52,6 +54,7 @@ namespace AD {
 		int GetWidth();
 		int GetHeight();
 		bool GetHasVSync();
+		bool GetDidMouseMove();
 
 		void SetVSync(bool vsync);
 		void SetCurrentLayerIndex(int index);

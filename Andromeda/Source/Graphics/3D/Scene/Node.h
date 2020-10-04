@@ -42,6 +42,13 @@ namespace AD {
 		void SetName(const std::string& name);
 
 		void AddChild(Node* child);
+		void CreateChild();
+		void MoveNode(Node* newParent);
+		Node* RemoveChild(Node* child);
+		Node* RemoveChild(int id);
+		void DeleteChild(Node* child);
+		void DeleteChild(int id);
+		void RemoveFromParent();
 
 		Node* SearchParentAndChildrenForNode(int id);
 		Node* SearchChildrenForNode(int id);
@@ -52,6 +59,9 @@ namespace AD {
 		Object* GetObjectComponent();
 		Camera* GetCameraComponent();
 		Light* GetLightComponent();
+		int GetID();
+		std::vector<Node*>& GetChildren();
+		int GetNumNodes();
 
 		bool GetHasObjectComponent();
 		bool GetHasCameraComponent();
@@ -65,12 +75,16 @@ namespace AD {
 		void RemoveCameraComponent();
 		void RemoveLightComponent();
 
+		glm::vec3& GetTranslationRef();
+		glm::vec3& GetRotationRef();
+
 		const glm::vec3& GetTranslation();
 		const glm::vec3& GetRotation();
 
 		void SetTranslation(const glm::vec3& translation);
 		void SetRotation(const glm::vec3& rotation);
 
+		static Node* DeepCopyTo(Node* node, Node* resultingParent);
 		// Copies children nodes
 		static Node* DeepCopy(Node* node);
 		// Doesn't copy children nodes

@@ -34,6 +34,8 @@ namespace AD {
 		const float GetMovementSpeed();
 		const glm::vec3& GetTranslation();
 		const glm::vec3& GetRotation();
+		glm::vec3& GetTranslationRef();
+		glm::vec3& GetRotationRef();
 		glm::vec3 GetUpDirection();
 		glm::vec3 GetForwardDirection();
 		glm::mat4 GetProjectionMatrix();
