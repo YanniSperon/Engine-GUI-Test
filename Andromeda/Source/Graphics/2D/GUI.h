@@ -55,6 +55,7 @@ namespace AD {
 
 		static void SetDarkTheme();
 		static void SetLightTheme();
+		static void SetEmptyTheme();
 
 		static float GetTextSizeX(const std::string& text);
 		static float GetTextSizeY(const std::string& text);

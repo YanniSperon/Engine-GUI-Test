@@ -29,7 +29,5 @@ namespace AD {
 		virtual void Draw() override;
 
 		void SetOverlayOf(Layer3D* layer);
-	private:
-		void DrawSceneGraphRecursive(Node* node);
 	};
 }

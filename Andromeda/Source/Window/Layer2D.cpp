@@ -14,6 +14,38 @@ namespace AD {
 
 	static Node* s_SelectedNode = nullptr;
 
+	void DrawSceneGraphRecursive(Node* node)
+	{
+		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanFullWidth;
+		if (s_SelectedNode == node) {
+			flags |= ImGuiTreeNodeFlags_Selected;
+		}
+		if (node->GetChildren().size() == 0) {
+			flags |= ImGuiTreeNodeFlags_Leaf;
+			flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen;
+			ImGui::TreeNodeEx((void*)node, flags, "%s - ID: %i", node->GetName().c_str(), node->GetID());
+			if (ImGui::IsItemClicked()) {
+				s_SelectedNode = node;
+			}
+		}
+		else {
+			flags |= ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			flags |= ImGuiTreeNodeFlags_DefaultOpen;
+			bool rootNode = ImGui::TreeNodeEx((void*)node, flags, "%s - ID: %i", node->GetName().c_str(), node->GetID());
+			if (ImGui::IsItemClicked()) {
+				s_SelectedNode = node;
+			}
+			if (rootNode)
+			{
+				for (int i = 0; i < node->GetChildren().size(); i++) {
+					DrawSceneGraphRecursive(node->GetChildren()[i]);
+				}
+
+				ImGui::TreePop();
+			}
+		}
+	}
+
 	Layer2D::Layer2D(Layer2DType layer2DType, int width, int height, int x, int y)
 		: Layer(LayerType::TWOD, width, height, x, y, "2D Layer"), m_OverlayOf(nullptr), m_Layer2DType(layer2DType)
 	{
@@ -116,6 +148,11 @@ namespace AD {
 
 		ImGuiIO* io = GUI::GetInstance()->GetIO();
 
+#ifdef DARK_MODE
+		GUI::SetDarkTheme();
+#else
+		GUI::SetLightTheme();
+#endif
 		switch (m_Layer2DType)
 		{
 		case AD::Layer2DType::GUI:
@@ -162,6 +199,11 @@ namespace AD {
 				ImGui::TreePop();
 			}
 			if (s_SelectedNode && ImGui::IsWindowFocused()) {
+				if (s_SelectedNode != scene.GetRootNode() && m_Input.GetKeyboardKeyPressed(AD_KEY_DELETE)) {
+					Node* tempParent = s_SelectedNode->GetParent();
+					tempParent->DeleteChild(s_SelectedNode);
+					s_SelectedNode = tempParent;
+				}
 				if (m_Input.GetKeyboardKeyHeld(AD_KEY_LEFT_CONTROL) && m_Input.GetKeyboardKeyPressed(AD_KEY_C)) {
 					clipboardNode = s_SelectedNode;
 				}
@@ -413,7 +455,6 @@ namespace AD {
 				}
 				ImGui::Unindent();
 			}
-
 			ImGui::End();
 			break;
 		}
@@ -429,38 +470,6 @@ namespace AD {
 	void Layer2D::SetOverlayOf(Layer3D* layer)
 	{
 		m_OverlayOf = layer;
-	}
-
-	void Layer2D::DrawSceneGraphRecursive(Node* node)
-	{
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_SpanFullWidth;
-		if (s_SelectedNode == node) {
-			flags |= ImGuiTreeNodeFlags_Selected;
-		}
-		if (node->GetChildren().size() == 0) {
-			flags |= ImGuiTreeNodeFlags_Leaf;
-			flags |= ImGuiTreeNodeFlags_NoTreePushOnOpen;
-			ImGui::TreeNodeEx((void*)node, flags, "%s - ID: %i", node->GetName().c_str(), node->GetID());
-			if (ImGui::IsItemClicked()) {
-				s_SelectedNode = node;
-			}
-		}
-		else {
-			flags |= ImGuiTreeNodeFlags_OpenOnDoubleClick;
-			flags |= ImGuiTreeNodeFlags_DefaultOpen;
-			bool rootNode = ImGui::TreeNodeEx((void*)node, flags, "%s - ID: %i", node->GetName().c_str(), node->GetID());
-			if (ImGui::IsItemClicked()) {
-				s_SelectedNode = node;
-			}
-			if (rootNode)
-			{
-				for (int i = 0; i < node->GetChildren().size(); i++) {
-					DrawSceneGraphRecursive(node->GetChildren()[i]);
-				}
-
-				ImGui::TreePop();
-			}
-		}
 	}
 }
 
