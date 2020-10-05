@@ -117,6 +117,21 @@ namespace AD {
 		return m_Rotation;
 	}
 
+	float& Camera::GetNearPlaneRef()
+	{
+		return m_NearPlane;
+	}
+
+	float& Camera::GetFarPlaneRef()
+	{
+		return m_FarPlane;
+	}
+
+	float& Camera::GetMovementSpeedRef()
+	{
+		return m_MovementSpeed;
+	}
+
 	glm::vec3 Camera::GetUpDirection()
 	{
 		return glm::rotateZ(glm::vec3(0.0f, 1.0f, 0.0f), glm::radians(-m_Rotation.z));

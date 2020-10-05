@@ -77,6 +77,7 @@ namespace AD {
 
 		glm::vec3& GetTranslationRef();
 		glm::vec3& GetRotationRef();
+		std::string& GetNameRef();
 
 		const glm::vec3& GetTranslation();
 		const glm::vec3& GetRotation();

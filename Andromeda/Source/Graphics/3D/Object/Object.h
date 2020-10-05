@@ -32,6 +32,9 @@ namespace AD {
 		const glm::vec3& GetTranslation();
 		const glm::vec3& GetRotation();
 		const glm::vec3& GetScale();
+		glm::vec3& GetTranslationRef();
+		glm::vec3& GetRotationRef();
+		glm::vec3& GetScaleRef();
 
 		Mesh3D* GetMesh();
 		Shader* GetShader();

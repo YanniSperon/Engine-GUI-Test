@@ -30,6 +30,6 @@ namespace AD {
 
 		void SetOverlayOf(Layer3D* layer);
 	private:
-		Node* DrawSceneGraphRecursive(Node* node, Node* previouslySelectedNode, bool shouldUnselect); // ImGuiTreeNodeFlags_Selected
+		void DrawSceneGraphRecursive(Node* node);
 	};
 }

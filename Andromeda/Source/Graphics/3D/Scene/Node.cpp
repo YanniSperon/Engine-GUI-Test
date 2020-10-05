@@ -12,6 +12,7 @@ namespace AD {
 		: m_Camera(nullptr), m_Object(nullptr), m_Light(nullptr), m_Children(), m_Parent(nullptr), m_Translation(0.0f), m_Rotation(0.0f), m_Name("Node"), m_ID(s_ID)
 	{
 		s_ID++;
+		m_Name.resize(64);
 	}
 
 	Node::Node(Node* parent)
@@ -19,6 +20,7 @@ namespace AD {
 	{
 		m_Parent->AddChild(this);
 		s_ID++;
+		m_Name.resize(64);
 	}
 
 	Node::~Node()
@@ -99,6 +101,7 @@ namespace AD {
 	void Node::SetName(const std::string& name)
 	{
 		m_Name = name;
+		m_Name.resize(64);
 	}
 
 	void Node::AddChild(Node* child)
@@ -302,6 +305,11 @@ namespace AD {
 		return m_Rotation;
 	}
 
+	std::string& Node::GetNameRef()
+	{
+		return m_Name;
+	}
+
 	const glm::vec3& Node::GetTranslation()
 	{
 		return m_Translation;
@@ -349,6 +357,7 @@ namespace AD {
 				copy->m_Light = Light::DeepCopy(node->m_Light);
 			}
 			copy->m_Name = "Node";
+			copy->m_Name.resize(64);
 			copy->m_Translation = node->m_Translation;
 			copy->m_Rotation = node->m_Rotation;
 
@@ -374,6 +383,7 @@ namespace AD {
 					copyRoot->m_Light = Light::DeepCopy(node->m_Light);
 				}
 				copyRoot->m_Name = "Node";
+				copyRoot->m_Name.resize(64);
 				copyRoot->m_Translation = node->m_Translation;
 				copyRoot->m_Rotation = node->m_Rotation;
 			}

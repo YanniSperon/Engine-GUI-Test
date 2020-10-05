@@ -35,6 +35,21 @@ namespace AD {
 		return m_Scale;
 	}
 
+	glm::vec3& Object::GetTranslationRef()
+	{
+		return m_Translation;
+	}
+
+	glm::vec3& Object::GetRotationRef()
+	{
+		return m_Rotation;
+	}
+
+	glm::vec3& Object::GetScaleRef()
+	{
+		return m_Scale;
+	}
+
 	Mesh3D* Object::GetMesh()
 	{
 		return m_Mesh.get();
