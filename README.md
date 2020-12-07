@@ -1,7 +1,7 @@
 # Andromeda
 Andromeda Engine
 
-##VERY MUCH A WORK IN PROGRESS!
+## VERY MUCH A WORK IN PROGRESS!
 
 Aims to implement PBR shading, a custom GUI library, multiple graphics backends, skeletal animations, and a custom physics engine.
 
