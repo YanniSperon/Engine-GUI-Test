@@ -137,9 +137,9 @@ namespace AD {
 			m_Texture->Bind();
 			m_Mesh->Bind();
 
-			m_Shader->SetMat4("M", m_FinalTransformation);
-			m_Shader->SetMat4("V", view);
-			m_Shader->SetMat4("P", projection);
+			m_Shader->SetMat4("u_M", m_FinalTransformation);
+			m_Shader->SetMat4("u_V", view);
+			m_Shader->SetMat4("u_P", projection);
 
 			m_Mesh->Draw();
 		}
@@ -154,9 +154,9 @@ namespace AD {
 
 			m_FinalTransformation = modelOffset * GetTransformationMatrix();
 
-			m_Shader->SetMat4("M", m_FinalTransformation);
-			m_Shader->SetMat4("V", view);
-			m_Shader->SetMat4("P", projection);
+			m_Shader->SetMat4("u_M", m_FinalTransformation);
+			m_Shader->SetMat4("u_V", view);
+			m_Shader->SetMat4("u_P", projection);
 
 			m_Mesh->Draw();
 		}

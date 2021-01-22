@@ -3,6 +3,7 @@
 #include "Config.h"
 #include "Renderer.h"
 #include "GUI.h"
+#include "Texture.h"
 
 #include <glew.h>
 #include <glfw3.h>
@@ -155,6 +156,18 @@ namespace AD {
 
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
+	}
+
+	void Window::SetIcon(const std::string& path)
+	{
+		GLFWimage images[3];
+		Texture::LoadRawData(path + "/48.png", &images[0].pixels, &images[0].width, &images[0].height, 0, 4);
+		Texture::LoadRawData(path + "/32.png", &images[1].pixels, &images[1].width, &images[1].height, 0, 4);
+		Texture::LoadRawData(path + "/16.png", &images[2].pixels, &images[2].width, &images[2].height, 0, 4);
+		glfwSetWindowIcon(m_Window, 3, images);
+		Texture::UnloadRawData(images[0].pixels);
+		Texture::UnloadRawData(images[1].pixels);
+		Texture::UnloadRawData(images[2].pixels);
 	}
 
 	void Window::Prepare()

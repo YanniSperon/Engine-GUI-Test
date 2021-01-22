@@ -20,30 +20,44 @@ namespace AD {
 	void Texture::LoadTexture(const std::string& name)
 	{
 		glGenTextures(1, &m_ID);
-		glBindTexture(GL_TEXTURE_2D, m_ID);
 		stbi_set_flip_vertically_on_load(1);
 
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(name.c_str(), &width, &height, &nrChannels, 0);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 		if (data)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			GLenum format = GL_RED;
+			if (nrChannels == 1) {
+				format = GL_RED;
+			}
+			else if (nrChannels == 3) {
+				format = GL_RGB;
+			}
+			else if (nrChannels == 4) {
+				format = GL_RGBA;
+			}
+			glBindTexture(GL_TEXTURE_2D, m_ID);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			stbi_image_free(data);
 		}
 		else
 		{
+			stbi_image_free(data);
 			Console::Error("Failed to load texture \"%s\"", name.c_str());
 		}
 	}
 
 	void Texture::Bind()
 	{
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
 
@@ -68,6 +82,16 @@ namespace AD {
 	std::string Texture::GetPath()
 	{
 		return m_Path;
+	}
+
+	void Texture::LoadRawData(const std::string& path, unsigned char** data, int* width, int* height, int* numberOfChannels, int expectedChannels)
+	{
+		*data = stbi_load(path.c_str(), width, height, numberOfChannels, expectedChannels);
+	}
+
+	void Texture::UnloadRawData(unsigned char* data)
+	{
+		stbi_image_free(data);
 	}
 
 	void Texture::Unbind()

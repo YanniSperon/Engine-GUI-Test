@@ -32,6 +32,8 @@ namespace AD {
 	public:
 		Window(const std::string& name, int width, int height);
 		~Window();
+
+		void SetIcon(const std::string& path);
 		
 		void Prepare();
 		void DispatchMouseInput(uint16_t button, uint16_t event);

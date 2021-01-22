@@ -112,6 +112,8 @@
     <ClInclude Include="Source\Graphics\3D\Texture\TextureManager.h" />
     <ClInclude Include="Source\Graphics\Renderer\LinearRenderer.h" />
     <ClInclude Include="Source\Graphics\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Physics\PhysicsBody.h" />
+    <ClInclude Include="Source\Resources\Files.h" />
     <ClInclude Include="Source\Utility\Config.h" />
     <ClInclude Include="Source\Utility\Console.h" />
     <ClInclude Include="Source\Utility\Input.h" />
@@ -432,6 +434,7 @@
     <ClCompile Include="Source\Graphics\3D\Texture\TextureManager.cpp" />
     <ClCompile Include="Source\Graphics\Renderer\LinearRenderer.cpp" />
     <ClCompile Include="Source\Graphics\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Resources\Files.cpp" />
     <ClCompile Include="Source\Utility\Config.cpp" />
     <ClCompile Include="Source\Utility\Console.cpp" />
     <ClCompile Include="Source\Utility\Input.cpp" />

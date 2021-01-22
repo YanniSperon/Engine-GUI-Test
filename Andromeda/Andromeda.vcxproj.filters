@@ -1021,6 +1021,8 @@
     <ClInclude Include="Source\Window\Window.h">
       <Filter>Window</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Resources\Files.h" />
+    <ClInclude Include="Source\Physics\PhysicsBody.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
@@ -1121,5 +1123,6 @@
     <ClCompile Include="Source\Window\Window.cpp">
       <Filter>Window</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Resources\Files.cpp" />
   </ItemGroup>
 </Project>

@@ -11,29 +11,30 @@ int main() {
 	Global::Initialize();
 
 	Window* window = Window::GetInstance();
+	window->SetIcon("Resources/Icon");
 
-	//Layer2D* overlay = window->AddLayer2D(Layer2DType::EDITOR);
+	Layer2D* overlay = window->AddLayer2D(Layer2DType::EDITOR);
 	Layer3D* layer = window->AddLayer3D();
-	//overlay->SetOverlayOf(layer);
-	//
-	//overlay->GetInput().SetShouldCaptureKeyboardInput(true);
-	//overlay->GetInput().SetShouldCaptureMouseInput(true);
-	//overlay->SetShouldBlockKeyboardInput(true);
-	//overlay->SetShouldBlockMouseInput(true);
-	//
-	//layer->GetInput().SetShouldCaptureKeyboardInput(false);
-	//layer->GetInput().SetShouldCaptureMouseInput(false);
-	//layer->SetShouldBlockKeyboardInput(false);
-	//layer->SetShouldBlockMouseInput(false);
-	//
-	//window->ShowMouse();
+	overlay->SetOverlayOf(layer);
 	
-	layer->GetInput().SetShouldCaptureKeyboardInput(true);
-	layer->GetInput().SetShouldCaptureMouseInput(true);
-	layer->SetShouldBlockKeyboardInput(true);
-	layer->SetShouldBlockMouseInput(true);
+	overlay->GetInput().SetShouldCaptureKeyboardInput(true);
+	overlay->GetInput().SetShouldCaptureMouseInput(true);
+	overlay->SetShouldBlockKeyboardInput(true);
+	overlay->SetShouldBlockMouseInput(true);
 	
-	window->HideMouse();
+	layer->GetInput().SetShouldCaptureKeyboardInput(false);
+	layer->GetInput().SetShouldCaptureMouseInput(false);
+	layer->SetShouldBlockKeyboardInput(false);
+	layer->SetShouldBlockMouseInput(false);
+	
+	window->ShowMouse();
+	
+	//layer->GetInput().SetShouldCaptureKeyboardInput(true);
+	//layer->GetInput().SetShouldCaptureMouseInput(true);
+	//layer->SetShouldBlockKeyboardInput(true);
+	//layer->SetShouldBlockMouseInput(true);
+	//
+	//window->HideMouse();
 
 
 
@@ -91,33 +92,33 @@ int main() {
 		double deltaTime = deltaTimeWithoutTimeFactor * timeConstant;
 		window->Prepare();
 
-		//if (window->GetInput().GetKeyboardKeyHeld(AD_KEY_LEFT_CONTROL) && window->GetInput().GetKeyboardKeyPressed(AD_KEY_1)) {
-		//	overlay->GetInput().SetShouldCaptureKeyboardInput(false);
-		//	overlay->GetInput().SetShouldCaptureMouseInput(false);
-		//	overlay->SetShouldBlockKeyboardInput(false);
-		//	overlay->SetShouldBlockMouseInput(false);
-		//
-		//	layer->GetInput().SetShouldCaptureKeyboardInput(true);
-		//	layer->GetInput().SetShouldCaptureMouseInput(true);
-		//	layer->SetShouldBlockKeyboardInput(true);
-		//	layer->SetShouldBlockMouseInput(true);
-		//
-		//	window->HideMouse();
-		//}
-		//
-		//if (window->GetInput().GetKeyboardKeyHeld(AD_KEY_LEFT_CONTROL) && window->GetInput().GetKeyboardKeyPressed(AD_KEY_2)) {
-		//	overlay->GetInput().SetShouldCaptureKeyboardInput(true);
-		//	overlay->GetInput().SetShouldCaptureMouseInput(true);
-		//	overlay->SetShouldBlockKeyboardInput(true);
-		//	overlay->SetShouldBlockMouseInput(true);
-		//
-		//	layer->GetInput().SetShouldCaptureKeyboardInput(false);
-		//	layer->GetInput().SetShouldCaptureMouseInput(false);
-		//	layer->SetShouldBlockKeyboardInput(false);
-		//	layer->SetShouldBlockMouseInput(false);
-		//
-		//	window->ShowMouse();
-		//}
+		if (window->GetInput().GetKeyboardKeyHeld(AD_KEY_LEFT_CONTROL) && window->GetInput().GetKeyboardKeyPressed(AD_KEY_1)) {
+			overlay->GetInput().SetShouldCaptureKeyboardInput(false);
+			overlay->GetInput().SetShouldCaptureMouseInput(false);
+			overlay->SetShouldBlockKeyboardInput(false);
+			overlay->SetShouldBlockMouseInput(false);
+		
+			layer->GetInput().SetShouldCaptureKeyboardInput(true);
+			layer->GetInput().SetShouldCaptureMouseInput(true);
+			layer->SetShouldBlockKeyboardInput(true);
+			layer->SetShouldBlockMouseInput(true);
+		
+			window->HideMouse();
+		}
+		
+		if (window->GetInput().GetKeyboardKeyHeld(AD_KEY_LEFT_CONTROL) && window->GetInput().GetKeyboardKeyPressed(AD_KEY_2)) {
+			overlay->GetInput().SetShouldCaptureKeyboardInput(true);
+			overlay->GetInput().SetShouldCaptureMouseInput(true);
+			overlay->SetShouldBlockKeyboardInput(true);
+			overlay->SetShouldBlockMouseInput(true);
+		
+			layer->GetInput().SetShouldCaptureKeyboardInput(false);
+			layer->GetInput().SetShouldCaptureMouseInput(false);
+			layer->SetShouldBlockKeyboardInput(false);
+			layer->SetShouldBlockMouseInput(false);
+		
+			window->ShowMouse();
+		}
 
 		window->Update(deltaTime);
 		window->Draw();

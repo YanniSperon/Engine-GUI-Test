@@ -65,6 +65,7 @@ namespace AD {
 
 	void Mesh3D::Bind()
 	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VRAMHandleIBO);
 		glBindVertexArray(m_VRAMHandleVAO);
 	}
 

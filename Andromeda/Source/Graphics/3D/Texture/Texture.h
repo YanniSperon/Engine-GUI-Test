@@ -27,6 +27,12 @@ namespace AD {
 
 		std::string GetPath();
 
+		// Data must be uninitialized
+		// The function will populate the data, width, height, and numberOfChannels variables
+		// Expected channels should be 0 if you are unsure
+		static void LoadRawData(const std::string& path, unsigned char** data, int* width, int* height, int* numberOfChannels, int expectedChannels);
+		static void UnloadRawData(unsigned char* data);
+
 		static void Unbind();
 	};
 }
